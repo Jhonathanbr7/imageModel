@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jhonathan Cardoso</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <style>
+    :root {
+      --brand: #4f46e5;
+      --brand-light: #eef2ff;
+      --brand-dark: #3730a3;
+    }
+
+    body {
+      background: #f8f7ff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: linear-gradient(135deg, var(--brand) 0%, #7c3aed 100%);
+      padding: 2.5rem 1rem 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .site-header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .site-header p {
+      margin: 0.4rem 0 0;
+      opacity: .8;
+      font-size: .95rem;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border: 3px solid rgba(255,255,255,.5);
+    }
+
+    /* ── Card ── */
+    .main-card {
+      background: #fff;
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 24px rgba(79,70,229,.12);
+      overflow: hidden;
+    }
+
+    /* ── Start button ── */
+    .btn-start {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 2rem;
+      padding: .75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(79,70,229,.4);
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .btn-start:hover {
+      background: var(--brand-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79,70,229,.5);
+    }
+
+    .btn-start:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(79,70,229,.3);
+    }
+
+    .btn-start:disabled {
+      opacity: .6;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    /* ── Webcam area ── */
+    #webcam-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 220px;
+      background: #f1f0fe;
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 2px dashed #c7d2fe;
+      transition: border-color .3s;
+    }
+
+    #webcam-wrapper.active {
+      border: 2px solid var(--brand);
+    }
+
+    #webcam-container canvas {
+      border-radius: .75rem;
+      display: block;
+      max-width: 100%;
+    }
+
+    .webcam-placeholder {
+      text-align: center;
+      color: #a5b4fc;
+      padding: 2rem;
+    }
+
+    .webcam-placeholder i {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: .5rem;
+    }
+
+    /* ── Progress bars ── */
+    .label-row {
+      margin-bottom: 1rem;
+    }
+
+    .label-name {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: .3rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .label-pct {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--brand);
+      min-width: 3rem;
+      text-align: right;
+    }
+
+    .progress {
+      height: 12px;
+      border-radius: 1rem;
+      background: #e0e7ff;
+    }
+
+    .progress-bar {
+      border-radius: 1rem;
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+      transition: width .3s ease;
+    }
+
+    .progress-bar.top {
+      background: linear-gradient(90deg, var(--brand), #7c3aed);
+      box-shadow: 0 0 8px rgba(79,70,229,.4);
+    }
+
+    /* ── Status badge ── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .3rem .8rem;
+      border-radius: 2rem;
+      background: #f1f0fe;
+      color: var(--brand);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #c7d2fe;
+    }
+
+    .status-dot.running {
+      background: #22c55e;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%        { opacity: .5; transform: scale(.7); }
+    }
+
+    /* ── Footer ── */
+    footer {
+      font-size: .8rem;
+      color: #9ca3af;
+      text-align: center;
+      padding: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="avatar">JC</div>
+    <h1>Jhonathan Cardoso</h1>
+    <p>Image Classifier · Teachable Machine</p>
+  </header>
+
+  <!-- Main content -->
+  <main class="container py-4" style="max-width: 680px;">
+    <div class="main-card p-4 p-md-5">
+
+      <!-- Status + Start -->
+      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 mb-4">
+        <div class="status-badge">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">Aguardando início</span>
+        </div>
+
+        <button class="btn-start" id="btn-start" onclick="init()">
+          <i class="bi bi-camera-video-fill"></i>
+          Iniciar câmera
+        </button>
+      </div>
+
+      <!-- Webcam -->
+      <div id="webcam-wrapper" class="mb-4">
+        <div class="webcam-placeholder" id="webcam-placeholder">
+          <i class="bi bi-camera"></i>
+          <p class="mb-0 small">A câmera aparecerá aqui</p>
+        </div>
+        <div id="webcam-container"></div>
+      </div>
+
+      <!-- Labels / progress bars -->
+      <div id="label-container"></div>
+
+    </div>
+  </main>
+
+  <footer>
+    Powered by TensorFlow.js &amp; Teachable Machine
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const MODEL_URL = "https://teachablemachine.withgoogle.com/models/cIOEnMPUI/";
+
+    let model, webcam, labelContainer, maxPredictions;
+    let bars = [], names = [], pcts = [];
+
+    async function init() {
+      const btn = document.getElementById("btn-start");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Carregando…';
+
+      setStatus("Carregando modelo…", false);
+
+      const modelURL    = MODEL_URL + "model.json";
+      const metadataURL = MODEL_URL + "metadata.json";
+
+      model          = await tmImage.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+
+      const flip = true;
+      webcam = new tmImage.Webcam(300, 300, flip);
+      await webcam.setup();
+      await webcam.play();
+      window.requestAnimationFrame(loop);
+
+      // Show webcam
+      const placeholder = document.getElementById("webcam-placeholder");
+      placeholder.style.display = "none";
+      document.getElementById("webcam-wrapper").classList.add("active");
+      document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+      // Build progress bars
+      labelContainer = document.getElementById("label-container");
+      labelContainer.innerHTML = "";
+
+      const classes = model.getClassLabels ? model.getClassLabels() : [];
+
+      for (let i = 0; i < maxPredictions; i++) {
+        const className = classes[i] || `Classe ${i + 1}`;
+
+        const row = document.createElement("div");
+        row.className = "label-row";
+
+        const header = document.createElement("div");
+        header.className = "label-name";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = className;
+
+        const pctSpan = document.createElement("span");
+        pctSpan.className = "label-pct";
+        pctSpan.textContent = "0%";
+
+        header.appendChild(nameSpan);
+        header.appendChild(pctSpan);
+
+        const progressWrap = document.createElement("div");
+        progressWrap.className = "progress";
+
+        const bar = document.createElement("div");
+        bar.className = "progress-bar";
+        bar.style.width = "0%";
+        bar.setAttribute("role", "progressbar");
+        bar.setAttribute("aria-valuenow", "0");
+        bar.setAttribute("aria-valuemin", "0");
+        bar.setAttribute("aria-valuemax", "100");
+
+        progressWrap.appendChild(bar);
+        row.appendChild(header);
+        row.appendChild(progressWrap);
+        labelContainer.appendChild(row);
+
+        bars.push(bar);
+        pcts.push(pctSpan);
+        names.push(nameSpan);
+      }
+
+      btn.innerHTML = '<i class="bi bi-camera-video-fill"></i> Câmera ativa';
+      setStatus("Classificando…", true);
+    }
+
+    async function loop() {
+      webcam.update();
+      await predict();
+      window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+      const prediction = await model.predict(webcam.canvas);
+
+      // Find highest probability index
+      let maxIdx = 0;
+      prediction.forEach((p, i) => {
+        if (p.probability > prediction[maxIdx].probability) maxIdx = i;
+      });
+
+      for (let i = 0; i < maxPredictions; i++) {
+        const prob = prediction[i].probability;
+        const pct  = Math.round(prob * 100);
+
+        bars[i].style.width = pct + "%";
+        bars[i].setAttribute("aria-valuenow", pct);
+        pcts[i].textContent = pct + "%";
+
+        // Highlight the top prediction
+        bars[i].classList.toggle("top", i === maxIdx);
+      }
+    }
+
+    function setStatus(text, running) {
+      document.getElementById("status-text").textContent = text;
+      document.getElementById("status-dot").classList.toggle("running", running);
+    }
+  </script>
+</body>
+</html>
